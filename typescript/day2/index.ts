@@ -1,51 +1,51 @@
-import Bun from 'bun';
+import Bun from 'bun'
 
 async function main() {
-  const filePath = Bun.argv.at(-1);
+  const filePath = Bun.argv.at(-1)
 
   if (!filePath) {
-    console.error('provide valid filepath');
+    console.error('provide valid filepath')
   }
 
-  const fileContent = await getFileContent(filePath!);
-  console.log('ANSWER A: ', solutionA(fileContent));
-  console.log('ANSWER B: ', solutionB(fileContent));
+  const fileContent = await getFileContent(filePath!)
+  console.log('ANSWER A: ', solutionA(fileContent))
+  console.log('ANSWER B: ', solutionB(fileContent))
 }
 
 function solutionA(fileContent: string) {
-  const lines = fileContent.split('\n');
+  const lines = fileContent.split('\n')
 
-  let safeLevelCount = 0;
+  let safeLevelCount = 0
   for (const line of lines) {
-    const levels = line.split(' ').map(Number);
+    const levels = line.split(' ').map(Number)
     if (levels.length > 1) {
       if (checkLevels(levels)) {
-        safeLevelCount += 1;
+        safeLevelCount += 1
       }
     }
   }
 
-  return safeLevelCount;
+  return safeLevelCount
 }
 
 function solutionB(fileContent: string) {
-  const lines = fileContent.split('\n');
+  const lines = fileContent.split('\n')
 
-  let safeLevelCount = 0;
+  let safeLevelCount = 0
   for (const line of lines) {
-    const levels = line.split(' ').map(Number);
+    const levels = line.split(' ').map(Number)
     for (let i = 0; i < levels.length; i++) {
-      const splicedLevels = levels.toSpliced(i, 1);
+      const splicedLevels = levels.toSpliced(i, 1)
       if (levels.length > 1) {
         if (checkLevels(splicedLevels)) {
-          safeLevelCount += 1;
-          break;
+          safeLevelCount += 1
+          break
         }
       }
     }
   }
 
-  return safeLevelCount;
+  return safeLevelCount
 }
 
 function checkLevels(levels: number[]): boolean {
@@ -53,34 +53,34 @@ function checkLevels(levels: number[]): boolean {
 }
 
 function checkIncRec(levels: number[], curr: number, next: number) {
-  const currNum = levels[curr];
-  const nextNum = levels[next];
+  const currNum = levels[curr]
+  const nextNum = levels[next]
 
   if (!nextNum) {
-    return true;
+    return true
   }
 
   if (nextNum <= currNum) {
-    return false;
+    return false
   }
 
   if (!within(currNum, nextNum)) {
-    return false;
+    return false
   }
 
   return checkIncRec(levels, curr + 1, next + 1)
 }
 
 function checkDecRec(levels: number[], curr: number, next: number) {
-  const currNum = levels[curr];
-  const nextNum = levels[next];
+  const currNum = levels[curr]
+  const nextNum = levels[next]
 
   if (!nextNum) {
-    return true;
+    return true
   }
 
   if (nextNum >= currNum) {
-    return false;
+    return false
   }
 
   if (!within(currNum, nextNum)) {
@@ -92,17 +92,17 @@ function checkDecRec(levels: number[], curr: number, next: number) {
 
 function within(a: number, b: number) {
   if (a > b) {
-    const diff = a - b;
+    const diff = a - b
     return diff <= 3 && diff >= 1
   }
-  const diff = b - a;
+  const diff = b - a
   return diff <= 3 && diff >= 1
 }
 
 async function getFileContent(filePath: string): Promise<string> {
-  const bunFile = Bun.file(filePath);
+  const bunFile = Bun.file(filePath)
 
-  return bunFile.text();
+  return bunFile.text()
 }
 
-main();
+main()
